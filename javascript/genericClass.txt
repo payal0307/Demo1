@@ -1,0 +1,145 @@
+using System;
+using System.Collections.Generic;
+namespace StockMarket
+{
+    public class Baseclass<T, V>
+    {
+        public T stockId { get; set; }
+        public V createdOn { get; set; }
+    }
+
+    public class Stock : Baseclass<T, DateTime>
+    {
+        public string stockSymbol { get; set; }
+        public string stockName { get; set; }
+    }
+
+    public class PriceHistory : Baseclass<T, DateTime>
+    {
+        public decimal openPrice { get; set; }
+        public decimal highPrice { get; set; }
+        public decimal lowPrice { get; set; }
+        public decimal cosePrice { get; set; }
+    }
+
+    public class Users : Baseclass<T, DateTime>
+    {
+        public string username { get; set; }
+        public string email { get; set; }
+    }
+
+    public class Trade : Baseclass<T, DateTime>
+    {
+        public int userId { get; set; }
+        public int tradeType { get; set; }
+        public int tradeQuantity { get; set; }
+    }
+
+    public class Orders : Baseclass<T, DateTime>
+    {
+        public int userId { get; set; }
+        public int orderType { get; set; }
+        public int orderPrice { get; set; }
+        public int orderQuantity { get; set; }
+    }
+
+    public class TransactionHistory : Baseclass<T, DateTime>
+    {
+        public int userId { get; set; }
+        public int transactionType { get; set; }
+        public int transactionAmount { get; set; }
+    }
+
+    public class TradeExecution : Baseclass<T, DateTime>
+    {
+        public int buyOrderId { get; set; }
+        public int sellOrderId { get; set; }
+        public int executionPrice { get; set; }
+        public int executionQuantity { get; set; }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Stock<int> s = new Stock<int>
+            {
+                stockId = 1,
+                stockSymbol = "AAPL",
+                stockName = "Apple Inc.",
+                createdOn = DateTime.Now
+            };
+            Console.WriteLine("Stock");
+            Console.WriteLine(s.stockSymbol);
+            Console.WriteLine(s.stockName);
+            Console.WriteLine(s.stockId);
+            Console.WriteLine(s.createdOn);
+
+             PriceHistory<int> p = new PriceHistory<int>
+            {
+                stockId = 1,
+                openPrice = 150.00,
+                highPrice = 160.00,
+                lowPrice = 145.00,
+                closePrice = 155.00,
+                createdOn = DateTime.Now
+            };
+            Console.WriteLine("\nPrice History");
+            Console.WriteLine(p.stockId);
+            Console.WriteLine(p.openPrice);
+            Console.WriteLine(p.highPrice);
+            Console.WriteLine(p.lowPrice);
+            Console.WriteLine(p.closePrice);
+            Console.WriteLine(p.createdOn}");
+			
+			
+			Trade<int> t = new Trade<int>
+			{
+				stockId = 1,
+				userId = 1,
+				tradeType = 1,
+				tradeQuantity = 10,
+				createdOn = DateTime.Now
+			};
+			Console.WriteLine("Trade");
+			Console.WriteLine(t.stockId);
+			Console.WriteLine(t.userId);
+			Console.WriteLine(t.tradeType);
+			Console.WriteLine(t.tradeQuantity);
+			Console.WriteLine(t.createdOn);	
+			 orders<int> o = new Orders<int>
+				{
+					stockId = 1,
+					userId = 1,
+					orderType = 1,
+					orderPrice = 100,
+					orderQuantity = 5,
+					createdOn = DateTime.Now
+				};
+			Console.WriteLine("\nOrder");
+			Console.WriteLine(o.stockId);
+			Console.WriteLine(o.userId);
+			Console.WriteLine(o.OrderType);
+			Console.WriteLine(o.OrderPrice);
+			Console.WriteLine(o.OrderQuantity);
+			Console.WriteLine(o.order.createdOn}");
+			 TransactionHistory<int> t1 = new TransactionHistory<int>
+				{
+					stockId = 1,
+					userId = 1,
+					transactionType = 1,
+					transactionAmount = 500,
+					createdOn = DateTime.Now
+				};
+				Console.WriteLine("\nTransaction");
+				Console.WriteLine(t1.StockId);
+				Console.WriteLine(t1.UserId);
+				Console.WriteLine(t1.TransactionType);
+				Console.WriteLine(t1.TransactionAmount);
+				Console.WriteLine(t1.CreatedOn);
+						
+
+            Console.ReadLine();
+        }
+    }
+}
