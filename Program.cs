@@ -78,7 +78,31 @@ namespace crudOperation
             int rowaffected = cmd.ExecuteNonQuery();
             sqlcon.Close();
           }
-   
+
+        public void Datashow()
+        {
+            SqlConnection sqlcon = new SqlConnection(ConfigurationManager.ConnectionStrings["StockConnection"].ToString());
+
+            string query = "select stockSymbol,stockName from Stocks";
+            SqlCommand cmd = new SqlCommand(query, sqlcon);
+            sqlcon.Open();
+            SqlDataReader read = cmd.ExecuteReader();
+            
+            
+                while (read.Read())
+                {
+                    Console.WriteLine("{0} {1}", read.GetString(0), read.GetString(1));
+
+                }
+            
+            read.Close();
+            Console.ReadKey();
+
+
+
+
+        }
+
     }
    
 }
