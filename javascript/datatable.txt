@@ -1,0 +1,29 @@
+using System;
+using System.Data;
+using System.Data.SqlClient;
+
+namespace StockMarket
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            
+               SqlConnection sqlcon = new SqlConnection(ConfigurationManager.ConnectionStrings["StockConnection"].ToString());
+                string sqlQuery = "select * Stocks";
+                SqlCommand cmd = new SqlCommand(sqlQuery, sqlcon);
+
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+
+                DataTable dataTable = new DataTable();
+                adapter.Fill(dataTable);
+
+                foreach (DataRow row in dataTable.Rows)
+                {
+                    Console.WriteLine($"stockId: {row["stockId"]}, stockSymbol: {row["stockSymbol"]}, stockName: {row["stockName"]}");
+                }
+            }
+
+            Console.ReadLine();
+        }
+    }
