@@ -77,7 +77,7 @@ namespace StockMarket
 
              PriceHistory<int> p = new PriceHistory<int>
             {
-                stockId = 1,
+                priceId = 1,
                 openPrice = 150.00,
                 highPrice = 160.00,
                 lowPrice = 145.00,
@@ -85,7 +85,7 @@ namespace StockMarket
                 createdOn = DateTime.Now
             };
             Console.WriteLine("\nPrice History");
-            Console.WriteLine(p.stockId);
+            Console.WriteLine(p.priceId);
             Console.WriteLine(p.openPrice);
             Console.WriteLine(p.highPrice);
             Console.WriteLine(p.lowPrice);
@@ -95,21 +95,21 @@ namespace StockMarket
 			
 			Trade<int> t = new Trade<int>
 			{
-				stockId = 1,
+				tradeId = 1,
 				userId = 1,
 				tradeType = 1,
 				tradeQuantity = 10,
 				createdOn = DateTime.Now
 			};
 			Console.WriteLine("Trade");
-			Console.WriteLine(t.stockId);
+			Console.WriteLine(t.tradeId);
 			Console.WriteLine(t.userId);
 			Console.WriteLine(t.tradeType);
 			Console.WriteLine(t.tradeQuantity);
 			Console.WriteLine(t.createdOn);	
 			 orders<int> o = new Orders<int>
 				{
-					stockId = 1,
+					orderId = 1,
 					userId = 1,
 					orderType = 1,
 					orderPrice = 100,
@@ -117,7 +117,7 @@ namespace StockMarket
 					createdOn = DateTime.Now
 				};
 			Console.WriteLine("\nOrder");
-			Console.WriteLine(o.stockId);
+			Console.WriteLine(o.orderId);
 			Console.WriteLine(o.userId);
 			Console.WriteLine(o.OrderType);
 			Console.WriteLine(o.OrderPrice);
@@ -125,14 +125,14 @@ namespace StockMarket
 			Console.WriteLine(o.order.createdOn}");
 			 TransactionHistory<int> t1 = new TransactionHistory<int>
 				{
-					stockId = 1,
+					TransactionHistoryId= 1,
 					userId = 1,
 					transactionType = 1,
 					transactionAmount = 500,
 					createdOn = DateTime.Now
 				};
 				Console.WriteLine("\nTransaction");
-				Console.WriteLine(t1.StockId);
+				Console.WriteLine(t1.TransactionHistoryId);
 				Console.WriteLine(t1.UserId);
 				Console.WriteLine(t1.TransactionType);
 				Console.WriteLine(t1.TransactionAmount);
