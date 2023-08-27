@@ -1,0 +1,136 @@
+using System;
+using System.Collections.Generic;
+
+namespace StockMarketApp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+           
+            User<T> u = new User<T>
+            {
+                Id = 1,
+                UserName = "jiya;",
+                Email = "jiya@gmail.com",
+                Balance = 1000.00
+            };
+			Stock<T> s= new Stock<T>
+            {
+                Id = 1,
+                Symbol = "AAPL",
+                StockName = "Apple Inc.",
+                Sector = "Technology",
+                Industry = "Consumer Electronics"
+            };
+			Order<T> o = new Order<T>
+            {
+                Id = 1,
+                UserID = 1,
+                StockID = 1,
+                OrderType = "Buy",
+                Quantity = 10,
+                Price = 150.00m,
+                PlacedDate = DateTime.Now,
+                Status = "Pending"
+            };
+			Console.WriteLine(u.UserName);
+            Console.WriteLine(s.StockName);
+            Console.WriteLine(o.OrderType);
+
+
+            Console.ReadLine();
+
+		}
+
+	}
+
+public class Baseclass<T>
+{
+    public T Id { get; set; }
+}
+
+public class User<T> : BaseEntity<int>
+{
+    public string userName { get; set; }
+    public string email { get; set; }
+    public decimal balance { get; set; }
+}
+
+public class Stock<T> : BaseEntity<int>
+{
+    public string symbol { get; set; }
+    public string stockName { get; set; }
+    public string sector { get; set; }
+    public string industry { get; set; }
+}
+public class Order<T> : BaseEntity<int>
+{
+    public int userID { get; set; }
+    public int stockID { get; set; }
+    public string orderType { get; set; }
+    public int quantity { get; set; }
+    public decimal price { get; set; }
+    public DateTime placedDate { get; set; }
+    public string status { get; set; }
+}
+
+public class Trade<T> : BaseEntity<int>
+{
+    public int buyerUserID { get; set; }
+    public int sellerUserID { get; set; }
+    public int stockID { get; set; }
+    public int quantity { get; set; }
+    public decimal price { get; set; }
+    public DateTime tradeDate { get; set; }
+}
+public class Balance<T> : BaseEntity<int>
+{
+    public int userID { get; set; }
+    public decimal amount { get; set; }
+    public DateTime lastUpdated { get; set; }
+}
+
+public class Transaction<T> : BaseEntity<int>
+{
+    public int userID { get; set; }
+    public int stockID { get; set; }
+    public string transactionType { get; set; }
+    public int quantity { get; set; }
+    public decimal price { get; set; }
+    public DateTime pransactionDate { get; set; }
+}
+public class Portfolio<T> : BaseEntity<int>
+{
+    public int userID { get; set; }
+    public int stockID { get; set; }
+    public int quantity { get; set; }
+    public string pofitLossStatus { get; set; }
+}
+
+public class Watchlist<T> : BaseEntity<int>
+{
+    public int userID { get; set; }
+    public int stockID { get; set; }
+}
+public class PriceHistory<T> : BaseEntity<int>
+{
+    public int stockID { get; set; }
+    public decimal openPrice { get; set; }
+    public decimal highPrice { get; set; }
+    public decimal lowPrice { get; set; }
+    public decimal closePrice { get; set; }
+    public int volume { get; set; }
+    public DateTime tradeDate { get; set; }
+}
+public class Exchange<T> : BaseEntity<int>
+{
+    public int stockID { get; set; }
+    public string symbol { get; set; }
+    public string name { get; set; }
+    public decimal lastPrice { get; set; }
+    public int volume { get; set; }
+    public string exchangeType { get; set; }
+    public DateTime marketDate { get; set; }
+}
+}
