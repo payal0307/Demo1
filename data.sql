@@ -87,3 +87,57 @@ The Stock Market System is a software application that provides a platform for i
 3.2 Security
    - The system shall ensure secure transmission of user information and financial data.
    - The system shall implement appropriate authentication and authorization mechanisms to protect user accounts.
+_--+++++++++++
+1.1 Purpose
+   The purpose of the stock management system is to track and manage stocks in a portfolio, including buying and selling transactions.
+
+   1.2 Scope
+   The system will allow users to add, update, and delete stocks from a portfolio. It will also provide functionality to record buying and selling transactions for each stock.
+
+   1.3 Definitions, Acronyms, and Abbreviations
+   - SRS: Software Requirements Specification
+
+2. Overall Description
+   2.1 Product Perspective
+   The stock management system will be a standalone application that interacts with a database to store stock information and transaction details.
+
+   2.2 User Classes and Characteristics
+   The system is designed for portfolio managers, investors, or individuals who want to track their stock holdings.
+
+   2.3 Operating Environment
+   The system will be a web-based application accessible through a web browser. It will require a server to host the application and a database to store the stock and transaction data.
+
+   2.4 Design and Implementation Constraints
+   The system will be developed using a specific programming language and framework. It will also require a compatible database management system.
+
+   2.5 User Documentation
+   The system will provide user documentation, including a user manual and online help resources.
+3. System Features and Requirements
+   3.1 Stock Management
+   - The system shall allow users to add new stocks to the portfolio.
+   - The system shall allow users to update stock information, including stock symbol, company name, and price.
+   - The system shall allow users to delete stocks from the portfolio.
+
+   3.2 Transaction Management
+   - The system shall allow users to record buying transactions, including stock symbol, quantity, and price.
+   - The system shall allow users to record selling transactions, including stock symbol, quantity, and price.
+   - The system shall calculate and display the total value of stocks in the portfolio based on the transaction history.
+
+   3.3 Reporting
+   - The system shall provide reports on portfolio performance, including overall gain/loss, individual stock performance, and transaction history.
+
+4. Non-functional Requirements
+   4.1 Performance
+   - The system shall be able to handle a large number of stocks and transactions efficiently.
+   - The system shall provide a responsive user interface with minimal latency.
+
+   4.2 Security
+   - The system shall implement appropriate security measures to protect user data and prevent unauthorized access.
+
+   4.3 Usability
+   - The system shall have a user-friendly interface with intuitive navigation and clear instructions.
+   - The system shall provide error handling and informative error messages to guide users in case of input errors.
+
+5. System Interfaces
+   5.1 User Interface
+   The system will have a web-based user interface accessible through a web browser.
