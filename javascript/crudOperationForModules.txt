@@ -190,3 +190,24 @@ namespace crudOperation
 	}
    
 }
+public void updaterecordThrough()
+            {
+                SqlConnection sqlcon1 = new SqlConnection(ConfigurationManager.ConnectionStrings["StockConnection"].ToString());
+
+            //string query = "update Stocks set stockSymbol='FB',stockName='Facebook inc.' where stockId=3";
+            
+                Console.WriteLine("Enter id for update record");
+                int stokid =Convert.ToInt32(Console.ReadKey());
+                SqlCommand cmd1 = new SqlCommand("update Stock stockSymbol='FB',stockName='Facebook inc.' where stockId=stockid", sqlcon1, @id);
+                cmd1.Parameters.AddWithValue("@id", stokid);
+                //cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                //cmd.Parameters.Add("@stockId", SqlDbType.Int).Value = 0;
+                //cmd.Parameters.Add("@stockSymbol", SqlDbType.VarChar).Value = "fb";
+                //cmd.Parameters.Add("@stockName", SqlDbType.VarChar).Value = "facebook";
+                //cmd.Parameters.Add("@createdOn", SqlDbType.DateTime).Value = DateTime.Now;
+
+                sqlcon1.Open();
+                int rowaffected = cmd1.ExecuteNonQuery();
+                sqlcon1.Close();
+
+            }
