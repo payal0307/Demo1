@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <head><title>Registration Form</title></head>
+        <style>
+        
+        </style>
+        <h2>Registration Form</h2>
+        <form name="form" onsubmit="return myFunction();">
+            <br><br>
+            
+        <label for="firstname">FirstName </label>      
+        <input type="text" name="firstname" id="firstname"><span id="name"></span><br> <br>
+        <label for="lastname"> Lastname </label>         
+        <input type="text" name="lastname" id="lastname"> <br> <br>
+        <label for="mobileno"> Mobile No : </label>        
+            <input type="text" name="mobileno" id="mobileno"> <br> <br>
+            <label for="email">Email :</label>
+            <input type="text" name="email" id="email"> <br> <br>
+
+            Address : <textarea id="address"></textarea><br><br>
+        <label for="city"> City</label>   
+            <select id="city">  
+            <option value="City">select</option>  
+            <option value="Rajkot">Rajkot</option>  
+            <option value="Porbandar">Porbandar</option>  
+            <option value="Vapi">Vapi</option>  
+            </select> <br><br>  
+    
+            <label>Gender : </label><br>  
+                <input type="radio" name="male"/> Male <br>  
+                <input type="radio" name="female"/> Female <br> 
+                <br>   
+            <label>Hobbies :</label>
+            Travelling<input type="checkbox" name="travelling">
+            Singing<input type="checkbox" name="travelling">
+            Reading<input type="checkbox" name="travelling">
+            <br> <br>
+            
+            <input type="submit" value="submit">
+        </form>
+        <script>
+        function myFunction(){
+            var firstname = document.getElementById('firstname').value;
+            if (firstname == "") {
+            document.getElementById("name").innerHTML="please enter name";
+               
+             }
+           }
+        </script>
+    </body>
+</html>
