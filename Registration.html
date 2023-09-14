@@ -1,52 +1,140 @@
-<!DOCTYPE html>
-<html>
-    <body>
-        <head><title>Registration Form</title></head>
-        <style>
-        
-        </style>
-        <h2>Registration Form</h2>
-        <form name="form" onsubmit="return myFunction();">
-            <br><br>
-            
-        <label for="firstname">FirstName </label>      
-        <input type="text" name="firstname" id="firstname"><span id="name"></span><br> <br>
-        <label for="lastname"> Lastname </label>         
-        <input type="text" name="lastname" id="lastname"> <br> <br>
-        <label for="mobileno"> Mobile No : </label>        
-            <input type="text" name="mobileno" id="mobileno"> <br> <br>
-            <label for="email">Email :</label>
-            <input type="text" name="email" id="email"> <br> <br>
 
-            Address : <textarea id="address"></textarea><br><br>
-        <label for="city"> City</label>   
-            <select id="city">  
-            <option value="City">select</option>  
-            <option value="Rajkot">Rajkot</option>  
-            <option value="Porbandar">Porbandar</option>  
-            <option value="Vapi">Vapi</option>  
-            </select> <br><br>  
-    
-            <label>Gender : </label><br>  
-                <input type="radio" name="male"/> Male <br>  
-                <input type="radio" name="female"/> Female <br> 
-                <br>   
-            <label>Hobbies :</label>
-            Travelling<input type="checkbox" name="travelling">
-            Singing<input type="checkbox" name="travelling">
-            Reading<input type="checkbox" name="travelling">
-            <br> <br>
-            
-            <input type="submit" value="submit">
-        </form>
-        <script>
-        function myFunction(){
+            <!DOCTYPE html>
+<html>
+<head>
+    <title>Registration Form</title>
+    <script>
+        function validateForm() {
             var firstname = document.getElementById('firstname').value;
+            var lastname = document.getElementById('lastname').value;
+            var mobileNo = document.getElementById('mobileNo').value;
+            var email = document.getElementById('email').value;
+            var address = document.getElementById('address').value;
+            var city = document.getElementById('city').value;
+            var gender = document.querySelector('input[name="gender"]:checked');
+            var hobbies = document.querySelectorAll('input[name="hobbies"]:checked');
+            var file = document.getElementById('file').value;
+            var datetime = document.getElementById('datetime').value;
+
+            document.getElementById("fnameError").innerHTML = "";
+            document.getElementById("lnameError").innerHTML = "";
+            document.getElementById("mnoError").innerHTML = "";
+            document.getElementById("emailError").innerHTML = "";
+            document.getElementById("addressError").innerHTML = "";
+            document.getElementById("cityError").innerHTML = "";
+            document.getElementById("genderError").innerHTML = "";
+            document.getElementById("hobbiesError").innerHTML = "";
+            document.getElementById("fileError").innerHTML = "";
+            document.getElementById("datetimeError").innerHTML = "";
+
             if (firstname == "") {
-            document.getElementById("name").innerHTML="please enter name";
-               
-             }
-           }
-        </script>
-    </body>
+                document.getElementById("fnameError").innerHTML = "Please enter your firstname."; 
+            }
+            
+            if (lastname == "") {
+                document.getElementById("lnameError").innerHTML = "Please enter your lastname.";
+            }
+            
+            if (mobileNo == "") {
+                document.getElementById("mnoError").innerHTML = "Please enter your mobile number.";
+                
+            } else if (!/^\d+$/.test(mobileNo)) {
+                document.getElementById("mnoError").innerHTML = "Mobile number contain only digits.";   
+            }
+            
+            if (email == "") {
+                document.getElementById("emailError").innerHTML = "Please enter your email.";
+            }
+            if (address == "") {
+                document.getElementById("addressError").innerHTML = "Please enter your email.";
+            }
+            if (city == "") {
+                document.getElementById("cityError").innerHTML = "Please select a city.";
+            }
+            if (!gender) {
+                document.getElementById("genderError").innerHTML = "Please select a gender.";
+            }
+
+            if (hobbies.length == 0) {
+                document.getElementById("hobbiesError").innerHTML = "Please select  hobby.";
+            }
+            
+            if (file == "") {
+                document.getElementById("fileError").innerHTML = "Please upload a file.";
+            }
+            
+            if (datetime == "") {
+                document.getElementById("datetimeError").innerHTML = "Please select a date and time.";
+            }
+
+        }
+    </script>
+</head>
+<body>
+    <h1>Registration Form</h1>
+    <form onsubmit="return validateForm()">
+        <label>First Name:</label>
+        <input type="text" id="firstname">
+        <span id="fnameError" style="color: red;"></span>
+        <br><br>
+        
+        <label >Last Name:</label>
+        <input type="text" id="lastname">
+        <span id="lnameError" style="color: red;"></span>
+        <br><br>
+        
+        <label >Mobile No:</label>
+        <input type="text" id="mobileNo">
+        <span id="mnoError" style="color: red;"></span>
+        <br><br>
+        
+        <label >Email:</label>
+        <input type="email" id="email">
+        <span id="emailError" style="color: red;"></span>
+        <br><br>
+
+        Address : <textarea name="address" id="address"></textarea>
+        <span id="addressError" style="color: red;"></span><br><br>
+        
+        <label >City:</label>
+        <select id="city">
+            <option value="">Select</option>
+            <option value="Rajkot">Rajkot</option>
+            <option value="Porbandar">Porbandar</option>
+            <option value="Vapi">Vapi</option>
+        </select>
+        <span id="cityError" style="color: red;"></span>
+        <br><br>
+
+        <label>Gender:</label>
+        <input type="radio" id="male" name="gender" value="male">
+        <label for="male">Male</label>
+        <input type="radio" id="female" name="gender" value="female">
+        <label for="female">Female</label>
+        <span id="genderError" style="color: red;"></span>
+        <br><br>
+
+        <label>Hobbies:</label>
+        <input type="checkbox" id="travelling" name="hobbies" value="travelling">
+        <label for="travelling">Travelling</label>
+        <input type="checkbox" id="singing" name="hobbies" value="singing">
+        <label for="singing">Singing</label>
+        <input type="checkbox" id="reading" name="hobbies" value="reading">
+        <label for="reading">Reading</label>
+        <span id="hobbiesError" style="color: red;"></span>
+        <br><br>
+
+        <label>Upload File:</label>
+        <input type="file" id="file">
+        <span id="fileError" style="color: red;"></span>
+        <br><br>
+        
+        <label>Date :</label>
+        <input type="datetime-local" id="datetime">
+        <span id="datetimeError" style="color: red;"></span>
+        <br><br>
+        
+        <input type="submit" value="Submit">
+    </form>
+</body>
 </html>
