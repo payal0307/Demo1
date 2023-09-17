@@ -1,0 +1,39 @@
+1)calculate the total value of a user's portfolio, 
+and you want to use a CTE to help with the calculation
+WITH StockValues AS (
+    SELECT
+        p.userID,
+        p.stockID,
+        p.quantity,
+        ph.closePrice AS stockPrice,
+        p.quantity * ph.closePrice AS stockValue
+    FROM Portfolio p
+    JOIN PriceHistory ph ON p.stockID = ph.stockID
+    WHERE p.userID = @UserID
+)
+
+-- Calculate the total portfolio value
+SELECT
+    userID,
+    SUM(stockValue) AS TotalPortfolioValue
+FROM StockValues
+GROUP BY userID;
+2) retrieve a list of users who have made the most number of transactions 
+and display the total number of transactions for each user. 
+You can use a CTE for filtering and aggregation:
+
+WITH UserTransactionCounts AS (
+    SELECT
+        t.userID,
+        COUNT(*) AS TransactionCount
+    FROM Transactions t
+    GROUP BY t.userID
+)
+
+-- Retrieve users with the most transactions
+SELECT
+    u.userName,
+    utc.TransactionCount
+FROM UserTransactionCounts utc
+JOIN Users u ON utc.userID = u.userID
+WHERE utc.TransactionCount = (SELECT MAX(TransactionCount) FROM UserTransactionCounts);

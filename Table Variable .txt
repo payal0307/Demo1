@@ -1,0 +1,41 @@
+1)  etrieve a user's watchlist data for a specific user. 
+You can use a table variable in a query.
+
+DECLARE @Watchlist TABLE (
+    watchlistID INT,
+    userID INT,
+    stockID INT
+);
+
+-- Insert watchlist data into the table variable
+INSERT INTO @Watchlist (watchlistID, userID, stockID)
+SELECT w.watchlistID, w.userID, w.stockID
+FROM Watchlist w
+WHERE w.userID = @UserID;
+
+-- Select data from the table variable
+SELECT * FROM @Watchlist;
+2)  process a batch of transactions and calculate the total transaction cost. 
+You can use a table variable to hold the transaction data temporarily.
+
+DECLARE @TransactionBatch TABLE (
+    transactionID INT,
+    stockID INT,
+    quantity INT,
+    price DECIMAL(10, 2)
+);
+
+-- Insert batch of transactions into the table variable
+INSERT INTO @TransactionBatch (transactionID, stockID, quantity, price)
+VALUES
+    (1, 1001, 50, 45.50),
+    (2, 1002, 30, 28.75),
+    (3, 1001, 20, 46.25);
+
+-- Calculate the total transaction cost
+DECLARE @TotalCost DECIMAL(18, 2);
+SELECT @TotalCost = SUM(quantity * price)
+FROM @TransactionBatch;
+
+-- Display the total transaction cost
+SELECT @TotalCost AS TotalTransactionCost;

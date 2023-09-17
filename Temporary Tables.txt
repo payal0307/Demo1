@@ -1,0 +1,49 @@
+1) generate a report that shows the top-performing stocks based on their price change percentage over a specific period.
+ You can use a temporary table to store and process this information.
+
+
+CREATE TABLE #StockPerformance (
+    stockID INT,
+    stockName VARCHAR(100),
+    priceChangePercentage DECIMAL(10, 2)
+);
+
+-- Calculate and insert stock performance data into the temporary table
+INSERT INTO #StockPerformance (stockID, stockName, priceChangePercentage)
+SELECT s.stockID, s.stockName, ((ph.closePrice - ph.openPrice) / ph.openPrice) * 100 AS PriceChangePercentage
+FROM Stocks s
+INNER JOIN PriceHistory ph ON s.stockID = ph.stockID
+WHERE ph.tradeDate >= '2023-01-01' AND ph.tradeDate <= '2023-12-31';
+
+-- Retrieve and display the top-performing stocks
+SELECT TOP 10 *
+FROM #StockPerformance
+ORDER BY priceChangePercentage DESC;
+
+-- Drop the temporary table
+DROP TABLE #StockPerformance;
+2)calculate the total value of a user's portfolio, which involves joining multiple tables and performing calculations.
+ You can use a temporary table to store intermediate results.
+CREATE TABLE #TempPortfolio (
+    userID INT,
+    stockID INT,
+    quantity INT
+);
+
+-- Insert relevant portfolio data into the temporary table
+INSERT INTO #TempPortfolio (userID, stockID, quantity)
+SELECT p.userID, p.stockID, p.quantity
+FROM Portfolio p
+WHERE p.userID = @UserID;
+
+-- Calculate the total value
+DECLARE @TotalValue DECIMAL(18, 2);
+SELECT @TotalValue = SUM(ph.closePrice * tp.quantity)
+FROM PriceHistory ph
+INNER JOIN #TempPortfolio tp ON ph.stockID = tp.stockID;
+
+-- Drop the temporary table
+DROP TABLE #TempPortfolio;
+
+-- Return the total value
+SELECT @TotalValue AS TotalPortfolioValue;
