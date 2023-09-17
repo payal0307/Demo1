@@ -1,0 +1,93 @@
+CREATE TRIGGER trg_HandleStockOrders
+ON Orders
+AFTER INSERT
+AS
+BEGIN
+    -- Variables to hold relevant order information
+    DECLARE @OrderID INT, @UserID INT, @StockID INT, @OrderType VARCHAR(10), @Quantity INT, @Price DECIMAL(18, 2)
+
+    -- Get the newly inserted order details
+    SELECT @OrderID = orderID, @UserID = userID, @StockID = stockID, @OrderType = orderType, @Quantity = quantity, @Price = price
+    FROM inserted
+
+    -- Check if it's a Buy or Sell order
+    IF @OrderType = 'Buy'
+    BEGIN
+        -- Process Buy Order: Deduct the user's balance, record the transaction, and update the portfolio
+        DECLARE @TotalCost DECIMAL(18, 2)
+        SET @TotalCost = @Quantity * @Price
+
+        -- Check if the user has sufficient balance
+        IF (SELECT amount FROM Balances WHERE userID = @UserID) >= @TotalCost
+        BEGIN
+            -- Deduct the user's balance
+            UPDATE Balances
+            SET amount = amount - @TotalCost
+            WHERE userID = @UserID
+
+            -- Record the transaction
+            INSERT INTO Transactions (userID, stockID, transactionType, quantity, price)
+            VALUES (@UserID, @StockID, 'Buy', @Quantity, @Price)
+
+            -- Update the user's portfolio
+            IF EXISTS (SELECT * FROM Portfolio WHERE userID = @UserID AND stockID = @StockID)
+            BEGIN
+                UPDATE Portfolio
+                SET quantity = quantity + @Quantity
+                WHERE userID = @UserID AND stockID = @StockID
+            END
+            ELSE
+            BEGIN
+                INSERT INTO Portfolio (userID, stockID, quantity, profitLossStatus)
+                VALUES (@UserID, @StockID, @Quantity, 'Unrealized')
+            END
+
+            -- Update the order status to 'Filled'
+            UPDATE Orders
+            SET status = 'Filled'
+            WHERE orderID = @OrderID
+        END
+        ELSE
+        BEGIN
+            -- Insufficient balance, update the order status to 'Rejected'
+            UPDATE Orders
+            SET status = 'Rejected'
+            WHERE orderID = @OrderID
+        END
+    END
+    ELSE IF @OrderType = 'Sell'
+    BEGIN
+        -- Process Sell Order: Check if the user has enough shares in the portfolio
+        DECLARE @UserShares INT
+        SET @UserShares = (SELECT quantity FROM Portfolio WHERE userID = @UserID AND stockID = @StockID)
+
+        IF @UserShares >= @Quantity
+        BEGIN
+            -- Deduct shares from the user's portfolio and record the transaction
+            UPDATE Portfolio
+            SET quantity = quantity - @Quantity
+            WHERE userID = @UserID AND stockID = @StockID
+
+            -- Record the transaction
+            INSERT INTO Transactions (userID, stockID, transactionType, quantity, price)
+            VALUES (@UserID, @StockID, 'Sell', @Quantity, @Price)
+
+            -- Update the order status to 'Filled'
+            UPDATE Orders
+            SET status = 'Filled'
+            WHERE orderID = @OrderID
+        END
+        ELSE
+        BEGIN
+            -- Insufficient shares in the portfolio, update the order status to 'Rejected'
+            UPDATE Orders
+            SET status = 'Rejected'
+            WHERE orderID = @OrderID
+        END
+    END
+END
+select * from Users
+select * from Orders
+select * from Portfolio
+select * from Balances
+select * from Transactions
