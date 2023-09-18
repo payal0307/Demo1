@@ -1,0 +1,85 @@
+store temporary values during the execution of a program.
+These variables are particularly useful when you need to perform multiple 
+operations on a value, and you want to avoid modifying the original 
+value until you're sure of the final result. 
+ typically use SQL variables within stored procedures or functions. 
+------
+We declare temporary variables to store the trade ID, broker ID, commission rate, quantity, price, and commission for each trade.
+We use a cursor to iterate through each trade in the Trades table.
+For each trade, we retrieve the broker's commission rate based on the broker ID.
+We calculate the commission for the trade using the temporary variables and update the Trades table with the calculated commission.
+The loop continues until all trades have been processed.==========
+
+DECLARE @temp_tradeID INT;
+DECLARE @temp_brokerID INT;
+DECLARE @temp_commissionRate DECIMAL(10, 2);
+DECLARE @temp_quantity INT;
+DECLARE @temp_price DECIMAL(18, 2);
+DECLARE @temp_commission DECIMAL(18, 2);
+
+-- Loop through each trade
+DECLARE trade_cursor CURSOR FOR
+SELECT tradeID, brokerID, quantity, price
+FROM Trades;
+
+OPEN trade_cursor;
+FETCH NEXT FROM trade_cursor INTO @temp_tradeID, @temp_brokerID, @temp_quantity, @temp_price;
+
+WHILE @@FETCH_STATUS = 0
+BEGIN
+    -- Get the broker's commission rate
+    SELECT @temp_commissionRate = commissionRate
+    FROM Brokers
+    WHERE brokerID = @temp_brokerID;
+
+    -- Calculate the commission for the trade
+    SET @temp_commission = (@temp_quantity * @temp_price * @temp_commissionRate) / 100;
+
+    -- Update the commission in the Trades table
+    UPDATE Trades
+    SET commission = @temp_commission
+    WHERE tradeID = @temp_tradeID;
+
+    FETCH NEXT FROM trade_cursor INTO @temp_tradeID, @temp_brokerID, @temp_quantity, @temp_price;
+END;
+
+CLOSE trade_cursor;
+DEALLOCATE trade_cursor;
+
+------------
+-- Create a stored procedure that uses temporary variables
+CREATE PROCEDURE CalculateTotalBalance(@userID INT)
+AS
+BEGIN
+    DECLARE @temp_balance DECIMAL(18, 2);
+
+    -- Calculate the total balance for a user
+    SELECT @temp_balance = SUM(amount)
+    FROM Balances
+    WHERE userID = @userID;
+
+    -- Print the total balance
+    PRINT 'Total Balance for User ' + CAST(@userID AS VARCHAR) + ': ' + CAST(@temp_balance AS VARCHAR);
+END;
+----------------------
+DECLARE @temp_categoryID INT;
+DECLARE @temp_averagePrice DECIMAL(10, 2);
+
+SET @temp_categoryID = 3; -- Replace with the desired category ID
+
+-- Calculate the average price
+SELECT @temp_averagePrice = AVG(price)
+FROM Stocks
+WHERE categoryID = @temp_categoryID;
+
+---We declare @temp_categoryID as the temporary variable to store the desired category ID.
+We assign a value of 3 (or any other desired category ID) to @temp_categoryID.
+We calculate the average price of stocks in the specified category by using the AVG function and
+ filtering the Stocks table based on the categoryID matching the temporary variable @temp_categoryID.
+The result is stored in the @temp_averagePrice temporary variable, 
+which you can use for further processing or display.
+
+=======================
+redirect="viewkaname/error
+homecontroller ma
+[HandleEroor]
