@@ -182,6 +182,28 @@ public class AdvertisementController : Controller
         {
             return NotFound();
         }
+==============
+// GET: Home/Register
+        public ActionResult Registration()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Registration(string firstName, string lastName, string email, string password, string phone, string gender)
+        {
+            // Create a new User object with the provided data
+            User user = new User
+            {
+                FirstName = firstName,
+                LastName = lastName,
+                Email = email,
+                Password = password,
+                Phone = phone,
+                Gender = gender,
+                RegistrationDate = DateTime.Now
+            };
+            return RedirectToAction("RegistrationSuccess");
+        }
 
         advertisement.Status = newStatus;
         _context.SaveChanges();
