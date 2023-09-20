@@ -1,0 +1,191 @@
+[HttpPost]
+public IActionResult Register(User model)
+{
+    // Save the user data to the database or perform any required operations
+
+    // Example code to save the user to a database using ADO.NET
+
+    using (SqlConnection connection = new SqlConnection("YourConnectionString"))
+    {
+        string query = "INSERT INTO Users (FirstName, LastName, Email, Password, Phone, Gender, RegistrationDate) " +
+                       "VALUES (@FirstName, @LastName, @Email, @Password, @Phone, @Gender, @RegistrationDate)";
+
+        SqlCommand command = new SqlCommand(query, connection);
+
+        command.Parameters.AddWithValue("@FirstName", model.FirstName);
+        command.Parameters.AddWithValue("@LastName", model.LastName);
+        command.Parameters.AddWithValue("@Email", model.Email);
+        command.Parameters.AddWithValue("@Password", model.Password);
+        command.Parameters.AddWithValue("@Phone", model.Phone);
+        command.Parameters.AddWithValue("@Gender", model.Gender);
+        command.Parameters.AddWithValue("@RegistrationDate", model.RegistrationDate);
+
+        connection.Open();
+        command.ExecuteNonQuery();
+    }
+
+    // Redirect to a success page
+    return RedirectToAction("RegistrationSuccess");
+}=========================================
+public ActionResult Registration(UserRegistrationViewModel model)
+{
+    if (ModelState.IsValid)
+    {
+        // Hash the password securely
+        string passwordHash = HashPassword(model.Password);
+
+        // Create a User object
+        var user = new User
+        {
+            FirstName = model.FirstName,
+            LastName = model.LastName,
+            Email = model.Email,
+            PasswordHash = passwordHash,
+            Phone = model.Phone,
+            Gender = model.Gender,
+            RegistrationDate = DateTime.Now
+        };
+
+        
+
+        // Redirect to a success page or login page
+        return RedirectToAction("RegistrationSuccess");
+    }
+
+    // If the model is not valid, return to the registration form with errors
+    return View(model);
+}--------------------
+
+
+
+
+
+CREATE TABLE Advertisement (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    price DECIMAL(10, 2) NOT NULL,
+    category_id INT NOT NULL,
+    user_id INT NOT NULL,
+    location VARCHAR(100),
+    posted_date DATETIME NOT NULL,
+    expiration_date DATETIME,
+    status ENUM('active', 'expired', 'sold') DEFAULT 'active',
+    FOREIGN KEY (category_id) REFERENCES Category(id),
+    FoREIGN KEY (user_id) REFERENCES User(id)
+);  
+
+
+
+
+1. Implement User-Generated Advertisement Review Workflow:
+
+Set up a workflow where newly created advertisements are not immediately
+ visible to other users until they have been reviewed and approved by 
+administrators. This can involve adding a "status" field to your 
+"Advertisement" table (as mentioned in the previous responses) with values like
+ "pending review," "approved," or "rejected."
+
+2. User Submission:
+
+When a user creates an advertisement, it is initially marked as "pending review."
+ The user can submit the advertisement through the platform's interface.
+
+3. Administrator Review:
+
+Administrators or moderators have access to an admin dashboard where they can
+ review pending advertisements. They should have the ability to:
+
+View the advertisement details, including title, description, price, images, etc.
+Assess whether the advertisement complies with the platform's guidelines and policies.
+4. Rejection Criteria:
+
+Define clear criteria and guidelines for what makes an advertisement valid or invalid. These criteria can include:
+
+Ensuring that the advertisement content is appropriate and complies with community standards.
+Verifying that the price and other details are accurate.
+Checking for any prohibited items or content.
+Ensuring that images are of acceptable quality and do not violate copyright or contain sensitive content.
+5. Rejection Process:
+
+If an administrator determines that an advertisement does not meet the criteria, they can mark it as "rejected" and provide a reason for rejection. Common reasons might include content violations, incomplete information, or suspicious activity.
+
+6. User Notification:
+
+Notify the user whose advertisement was rejected with a clear explanation of the reason for rejection. This notification can be sent via email or through the platform's messaging system.
+
+7. User Edits and Resubmission:
+
+Allow users to edit their rejected advertisements based on the feedback provided by administrators. Once the necessary changes have been made, the user can resubmit the advertisement for review.
+
+8. Administrator Reassessment:
+
+Administrators should review resubmitted advertisements to ensure that the necessary corrections have been made. If the advertisement now complies with the guidelines, it can be approved.
+
+9. Approval and Publication:
+
+Advertisements that pass the review process are marked as "approved" and become visible to other users on the platform.
+
+10. Reporting and Moderation Tools:
+
+Implement reporting mechanisms that allow users to report advertisements that they believe violate the platform's policies. Provide administrators with tools to quickly address reported issues.
+based on this create database contoller ui for adverticeme
+
+
+
+
+
+public class AdvertisementController : Controller
+{
+    private readonly ApplicationDbContext _context;
+
+    public AdvertisementController(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+    // Action to display the advertisement creation form
+    public IActionResult Create()
+    {
+        return View();
+    }
+
+    // Action to handle advertisement submission
+    [HttpPost]
+    public IActionResult Create(Advertisement advertisement)
+    {
+        // Set the initial status to "PendingReview"
+        advertisement.Status = "PendingReview";
+        
+        // Add the advertisement to the database
+        _context.Advertisements.Add(advertisement);
+        _context.SaveChanges();
+
+        // Redirect to a thank you or confirmation page
+        return RedirectToAction("ThankYou");
+    }
+
+    // Action to display a list of pending advertisements for review
+    public IActionResult ReviewPending()
+    {
+        var pendingAdvertisements = _context.Advertisements.Where(a => a.Status == "PendingReview").ToList();
+        return View(pendingAdvertisements);
+    }
+
+    // Action to approve or reject an advertisement
+    [HttpPost]
+    public IActionResult UpdateStatus(int id, string newStatus)
+    {
+        var advertisement = _context.Advertisements.Find(id);
+
+        if (advertisement == null)
+        {
+            return NotFound();
+        }
+
+        advertisement.Status = newStatus;
+        _context.SaveChanges();
+
+        return RedirectToAction("ReviewPending");
+    }
+}
