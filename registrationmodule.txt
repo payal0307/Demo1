@@ -211,3 +211,91 @@ public class AdvertisementController : Controller
         return RedirectToAction("ReviewPending");
     }
 }
+--------------------
+public async Task<ActionResult> Registration(UserDto dto)
+    {
+        if (ModelState.IsValid)
+        {
+            var emailExists = await _userManager.FindByEmailAsync(dto.Email);
+            if (emailExists != null)
+            {
+                ModelState.AddModelError(string.Empty, "Email is already in use.");
+                return View(dto); // Return to the registration view with an error message
+            }
+
+            // You can proceed with user registration logic here
+            // Create a new ApplicationUser and set its properties
+            var newUser = new ApplicationUser
+            {
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                Email = dto.Email,
+                UserName = dto.Email,
+                // Set other properties as needed
+            };
+
+            var result = await _userManager.CreateAsync(newUser, dto.Password);
+
+            if (result.Succeeded)
+            {
+                // User registration was successful
+                // You can sign the user in if needed and redirect to a different action
+                await _signInManager.SignInAsync(newUser, isPersistent: false);
+                return RedirectToAction("Index"); // Redirect to a different action after registration
+            }
+            else
+            {
+                // User registration failed, handle errors
+                // You can add error messages to ModelState
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+
+                return View(dto); // Return to the registration view with error messages
+            }
+        }
+
+        // Model is not valid, return to the registration view with validation errors
+        return View(dto);
+    }
+}
+Create ad creatives: Design ad visuals (images or videos) and write ad copy (text).
+Set the campaign schedule: Choose when your ads will run and for how long.
+Choose bidding strategies: Decide how you want to pay for your ads (e.g., cost per click, cost per impression, etc.).
+Launch Your Campaign: Once your campaign is set up, review it to ensure everything is accurate, and then launch it.
+
+Monitor and Optimize: Regularly check the performance of your advertisements. Monitor key metrics like click-through rates (CTR), conversion rates, and return on investment (ROI). If necessary, make adjustments to your campaigns to improve their effectiveness. This may involve tweaking ad copy, adjusting targeting criteria, or reallocating your budget.
+
+Scale or Pause Campaigns: Based on your campaign performance, you can choose to scale up successful campaigns by increasing your budget or create new campaigns. Conversely, you can pause or stop campaigns that aren't delivering the desired results.
+
+A/B Testing: Experiment with different ad creatives, headlines, and targeting options to see which combinations work best for your goals. A/B testing allows you to refine your campaigns over time.
+
+Reporting: Most advertising platforms provide detailed reports on campaign performance. Analyze these reports to gain insights and refine your strategies.
+
+Budget Management: Keep track of your advertising budget and adjust it as needed to ensure you stay within your financial limits.
+
+Adherence to Policies: Be aware of the advertising policies and guidelines of the platform you're using. Non-compliance can result in ads being disapproved or accounts being suspended.
+
+Seek Professional Help: If you find managing ads overwhelming or if you have a substantial advertising budget, consider hiring a digital marketing agency or an expert to help you manage your campaigns effectively.
+
+
+
+Create ad creatives: Design ad visuals (images or videos) and write ad copy (text).
+Set the campaign schedule: Choose when your ads will run and for how long.
+Choose bidding strategies: Decide how you want to pay for your ads (e.g., cost per click, cost per impression, etc.).
+Launch Your Campaign: Once your campaign is set up, review it to ensure everything is accurate, and then launch it.
+
+Monitor and Optimize: Regularly check the performance of your advertisements. Monitor key metrics like click-through rates (CTR), conversion rates, and return on investment (ROI). If necessary, make adjustments to your campaigns to improve their effectiveness. This may involve tweaking ad copy, adjusting targeting criteria, or reallocating your budget.
+
+Scale or Pause Campaigns: Based on your campaign performance, you can choose to scale up successful campaigns by increasing your budget or create new campaigns. Conversely, you can pause or stop campaigns that aren't delivering the desired results.
+
+A/B Testing: Experiment with different ad creatives, headlines, and targeting options to see which combinations work best for your goals. A/B testing allows you to refine your campaigns over time.
+
+Reporting: Most advertising platforms provide detailed reports on campaign performance. Analyze these reports to gain insights and refine your strategies.
+
+Budget Management: Keep track of your advertising budget and adjust it as needed to ensure you stay within your financial limits.
+
+Adherence to Policies: Be aware of the advertising policies and guidelines of the platform you're using. Non-compliance can result in ads being disapproved or accounts being suspended.
+
+Seek Professional Help: If you find managing ads overwhelming or if you have a substantial advertising budget, consider hiring a digital marketing agency or an expert to help you manage your campaigns effectively.
