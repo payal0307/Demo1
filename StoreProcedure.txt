@@ -62,4 +62,59 @@ END
 
 --exec DeleteUser @userId = 1
 
+--------------------------
+public class AdminAdViewModel
+{
+    public int Id { get; set; }
+    public int AdId { get; set; }
+    public int AdminId { get; set; }
+    public string Reason { get; set; }
+    public string Status { get; set; }
+    public DateTime CreatedAt { get; set; }
+    
+    [Required(ErrorMessage = "Please specify a reason for your action.")]
+    public string AdminComment { get; set; }
+}
+
+public IActionResult Approve(int id, AdminAdViewModel adminAd)
+{
+    if (ModelState.IsValid)
+    {
+        // Retrieve the ad by its ID from the database
+        var adToApprove = _adminAdService.GetAdById(id);
+
+        if (adToApprove != null)
+        {
+            // Update the ad status to "Approved"
+            adToApprove.Status = "Approved";
+
+            // Update the ad in the database
+            _adminAdService.UpdateAd(adToApprove);
+
+            // Log the admin action with the reason provided
+            var adminAction = new AdminAction
+            {
+                AdId = adToApprove.Id,
+                AdminId = adminAd.AdminId,
+                Action = "Approve",
+                Reason = adminAd.AdminComment,
+                Timestamp = DateTime.Now
+            };
+
+            // Save the admin action to your data store
+            _adminAdService.LogAdminAction(adminAction);
+
+            return RedirectToAction("Index");
+        }
+        else
+        {
+            return NotFound();
+        }
+    }
+
+    // Handle validation errors and return to the view
+    return View(adminAd);
+}
+
+
 
