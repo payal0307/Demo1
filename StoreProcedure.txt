@@ -1,0 +1,65 @@
+CREATE PROCEDURE InsertUser
+    @firstName varchar(20),
+    @lastName varchar(20),
+    @userEmail varchar(50),
+    @Password varchar(15),
+    @MobileNo varchar(15),
+    @Gender varchar(15),
+    @Address varchar(50),
+    @City varchar(50)
+AS
+BEGIN
+    INSERT INTO User (firstName, lastName, userEmail, Password, MobileNo, Gender, Address, City)
+    VALUES (@firstName, @lastName, @userEmail, @Password, @MobileNo, @Gender, @Address, @City)
+END
+
+--EXEC InsertUser 
+    @firstName = 'Payal',
+    @lastName = 'Limbola',
+    @userEmail = 'payal@gmail.com',
+    @Password = 'password123',
+    @MobileNo = '9875641236',
+    @Gender = 'Female',
+    @Address = 'mnkmdnid',
+    @City = 'Porbandar'
+----------------Update------------------------- 
+sql
+Copy code
+CREATE PROCEDURE UpdateUser
+    @userId INT,
+    @firstName varchar(20),
+    @lastName varchar(20),
+    @email varchar(50),
+    @Password varchar(10),
+    @MobileNo varchar(15),
+    @Gender varchar(15),
+    @Address varchar(50),
+    @City varchar(50)
+AS
+BEGIN
+    UPDATE User set firstName = @firstName,lastName = @lastName,userEmail = @userEmail,
+Password = @Password,MobileNo = @MobileNo, Gender = @Gender,Address = @Address,City = @City
+WHERE userId = @userId
+END
+
+---exec UpdateUser 
+    @userId = 1,  
+    @firstName = 'payal',
+    @LastName = 'limbola',
+    @Email = 'payal@gmail.com',
+    @Password = 'Payal@03',
+    @MobileNo = '6359797875',
+    @Gender = 'Female',
+    @Address = 'jjhiwuj',
+    @City = 'Porbandar'
+----------------delete----------------
+CREATE PROCEDURE DeleteUser
+    @userId INT
+AS
+BEGIN
+    delete from User where userId = @userId
+END
+
+--exec DeleteUser @userId = 1
+
+
