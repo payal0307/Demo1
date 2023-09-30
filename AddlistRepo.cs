@@ -106,4 +106,106 @@ namespace OLXPROJECT.Models
                 }
             }
         }
+    }---------------------------------------------
+   using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+
+namespace adddemo.Models
+{
+  public class RepoModel
+  {
+    public List<RepoModel> GetAddlists()
+    {
+      List<RepoModel> myads = new List<RepoModel>();
+      var myAdvertise = new MyAdvertise();
+
+      using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString()))
+      {
+        try
+        {
+          string query = @"
+SELECT p.advertiseTitle, p.advertiseDescription, a.advertiseStatus
+FROM tbl_ProductDetails p
+INNER JOIN tbl_Users u ON p.userId = u.userId
+INNER JOIN tbl_Areas a ON p.areaId = a.areaId";
+
+          SqlCommand cmd = new SqlCommand(query, con);
+
+          con.Open();
+          SqlDataReader reader = cmd.ExecuteReader();
+
+          while (reader.Read())
+          {
+            myads.Add(new RepoModel
+            {
+              advertiseTitle = Convert.ToString(reader["advertiseTitle"]),
+              advertiseDescription = Convert.ToString(reader["advertiseDescription"]),
+              advertiseStatus = Convert.ToString(reader["advertiseStatus"])
+            });
+          }
+
+          reader.Close();
+        }
+        catch (Exception ex)
+        {
+          // Handle the exception gracefully
+          Console.WriteLine("Error: " + ex.Message);
+        }
+      }
+
+      return myads;
     }
+
+    public void ApproveAdvertise(int advertiseId)
+    {
+      using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString()))
+      {
+        try
+        {
+          string query = @"
+UPDATE tbl_ProductDetails SET advertiseStatus = 'Approved'
+WHERE advertiseId = @AdvertiseId";
+
+          SqlCommand cmd = new SqlCommand(query, con);
+          cmd.Parameters.AddWithValue("@AdvertiseId", advertiseId);
+
+          con.Open();
+          cmd.ExecuteNonQuery();
+        }
+        catch (Exception ex)
+        {
+          // Handle the exception gracefully
+          Console.WriteLine("Error: " + ex.Message);
+        }
+      }
+    }
+
+    public void RejectAdvertise(int advertiseId)
+    {
+      using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString()))
+      {
+        try
+        {
+          string query = @"
+UPDATE tbl_ProductDetails SET advertiseStatus = 'Rejected'
+WHERE advertiseId = @AdvertiseId";
+
+          SqlCommand cmd = new SqlCommand(query, con);
+          cmd.Parameters.AddWithValue("@AdvertiseId", advertiseId);
+
+          con.Open();
+          cmd.ExecuteNonQuery();
+        }
+        catch (Exception ex)
+        {
+          // Handle the exception gracefully
+          Console.WriteLine("Error: " + ex.Message);
+        }
+      }
+    }
+  }
+}
