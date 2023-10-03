@@ -1,0 +1,82 @@
+@model IEnumerable<adddemo.Models.MyAdvertiseModel>
+
+@{
+    ViewBag.Title = "Addlist";
+}
+
+<h2>Addlist</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.AdvertiseId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.productCategoryName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AdvertiseTitle)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AdvertiseDescription)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AdvertisePrice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.cityName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AdvertiseStatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AdvertiseApproved)
+        </th>
+        <th>Action</th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.AdvertiseId)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.productCategoryName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.AdvertiseTitle)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.AdvertiseDescription)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.AdvertisePrice)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.cityName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.AdvertiseStatus)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.FirstName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.AdvertiseApproved)
+    </td>
+    <td>
+    <td>
+        @Html.ActionLink("Approve", "Approve", new { @class = "btn btn-primary"}) |
+        @Html.ActionLink("reject", "reject", new { @class = "btn btn-primary" }) |
+        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+    </td>
+</tr>
+}
+
+</table>
