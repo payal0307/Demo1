@@ -80,3 +80,115 @@
 }
 
 </table>
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
+
+namespace adddemo.Models
+{
+    public class RepoModel
+    {
+        public List<MyAdvertiseModel> Advertises()
+        {
+            List<MyAdvertiseModel> myAdvertiseList = new List<MyAdvertiseModel>();
+
+            using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["connection"].ToString()))
+            {
+                try
+                {
+                    string query = "SELECT p.AdvertiseId, p.AdvertiseTitle, p.AdvertiseDescription, a.AdvertiseStatus " +
+                                    "FROM MyAdvertise p " +
+                                    "INNER JOIN Users u ON p.UserId = u.UserId " +
+                                    "INNER JOIN Areas a ON p.AreaId = a.AreaId";
+
+                    SqlCommand cmd = new SqlCommand(query, con);
+
+                    con.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        MyAdvertiseModel myAdvertise = new MyAdvertiseModel
+                        {
+                            AdvertiseId = Convert.ToInt32(reader["AdvertiseId"]),
+                            productCategoryName=Convert.ToInt32(reader["productCategoryName"]),
+                            AdvertiseTitle = Convert.ToString(reader["AdvertiseTitle"]),
+                            AdvertiseDescription = Convert.ToString(reader["AdvertiseDescription"]),
+                            AdvertisePrice=Convert.ToInt32(reader["AdvertisePrice"]),
+                            cityName=Convert.ToInt32(reader["cityName"]),
+                            AdvertiseStatus = Convert.ToBoolean(reader["AdvertiseStatus"]),
+                            FirstName=Convert.ToString(reader["FirstName"]),
+                            AdvertiseApproved=Convert.ToBoolean(reader["AdvertiseApproved"])
+
+                        };
+
+                        myAdvertiseList.Add(myAdvertise);
+                    }
+
+                    reader.Close();
+                }
+                catch (Exception ex)
+                {
+                    // Handle the exception or log the error
+                    Console.WriteLine("Error: " + ex.Message);
+                }
+            }
+
+            return myAdvertiseList;
+        }
+    }
+}
+namespace adddemo.Models
+{
+    public class MyAdvertiseModel
+    {
+        public int AdvertiseId { get; set; }
+        public int productCategoryName { get; set; }
+        public string AdvertiseTitle { get; set; }
+        public string AdvertiseDescription { get; set; }
+        public decimal AdvertisePrice { get; set; }
+        public int cityName { get; set; }
+        public bool AdvertiseStatus { get; set; }
+        public string FirstName { get; set; }
+        public bool AdvertiseApproved { get; set; }
+    }
+}
+using adddemo.Models;
+using System.Collections.Generic;
+using System.Web.Mvc;
+
+namespace adddemo.Controllers
+{
+    public class HomeController : Controller
+    {
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        public ActionResult About()
+        {
+            ViewBag.Message = "Your application description page.";
+
+            return View();
+        }
+
+        public ActionResult Contact()
+        {
+            ViewBag.Message = "Your contact page.";
+             
+            return View();
+        }
+       
+        [HttpGet]
+        public ActionResult Addlist()
+        {
+            RepoModel repo = new RepoModel();
+            List<MyAdvertiseModel> advertiseList = repo.Advertises(); // Capture the list
+            return View(advertiseList); // Pass the list to the view
+        }
+    }
+    }
+ 
+   
