@@ -190,5 +190,124 @@ namespace adddemo.Controllers
         }
     }
     }
- 
+03/oct/2023------------------------------
+using demo.Models;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+
+namespace demo.Models
+{
+    public class adslistRepo
+    {
+        public List<MyAdvertise> Advertises()
+        {
+            List<MyAdvertise> myAdvertiseList = new List<MyAdvertise>();
+
+            using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString()))
+            {
+                try
+                {
+                  // string query = "GetAdvertiseData2";
+                    SqlCommand cmd = new SqlCommand("GetAdvertiseData2", con);
+
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    con.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        MyAdvertise myAdvertise = new MyAdvertise
+                        {
+                            advertiseId = Convert.ToInt32(reader["advertiseId"]),
+                          //  pro=Convert.ToInt32(reader["productCategoryName"]),
+                            advertiseTitle = Convert.ToString(reader["advertiseTitle"]),
+                            advertiseDescription = Convert.ToString(reader["advertiseDescription"]),
+                            advertisePrice = Convert.ToInt32(reader["advertisePrice"]),
+                            //areaName=Convert.ToInt32(reader["areaName"]),
+                            advertiseStatus = Convert.ToBoolean(reader["advertiseStatus"]),
+                            //firstName = Convert.ToString(reader["firstName"]),
+                            //advertiseApproved = Convert.ToBoolean(reader["advertiseApproved"])
+
+                        };
+
+                        myAdvertiseList.Add(myAdvertise);
+                    }
+
+                    reader.Close();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                }
+            }
+
+            return myAdvertiseList;
+        }
+        public bool ApproveAdvertise(int advertiseId)
+        {
+            using (SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString()))
+            {
+                    string query = "UPDATE tbl_ProductDetails SET advertiseStatus = 'Approved' WHERE advertiseId = @advertiseId";
+                    SqlCommand cmd = new SqlCommand(query, con);
+                    cmd.Parameters.AddWithValue("@advertiseId", advertiseId);
+
+                    con.Open();
+                    int i=cmd.ExecuteNonQuery();
+                    con.Close();
+                if (i >= 1)
+                {
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+
+
+            }
+
+            
+
+        }
+    }
+}
+
    
+        public ActionResult addlist()
+        {
+           adslistRepo repo = new adslistRepo();
+            List<MyAdvertise> advertiseList = repo.Advertises(); 
+            return View(advertiseList);
+        }
+        public ActionResult ApproveAdvertise(int advertiseId)
+        {
+            adslistRepo repo = new adslistRepo();
+            bool approve = repo.ApproveAdvertise(advertiseId);
+            return View(approve);
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace demo.Models
+{
+    public class MyAdvertise
+    {
+        public int advertiseId { get; set; }
+//public int productCategoryName { get; set; }
+        public string advertiseTitle { get; set; }
+        public string advertiseDescription { get; set; }
+        public decimal advertisePrice { get; set; }
+//public int areaName { get; set; }
+        public bool advertiseStatus { get; set; }
+       // public string firstName { get; set; }
+       // public bool advertiseApproved { get; set; }
+           
+    }
+}
